@@ -1,0 +1,73 @@
+Exemplo de Criptografia e Descriptografia de Senha (PIN) com chaves de teste
+============================================================================
+
+Nos exemplos a seguir, o algoritmo de criptografia utilizado é o 3DES e as
+chaves utilizadas são 3DES duplas.
+
+---------------------------------------------------------------------------
+
+Exemplo de chave de transporte (KEK) da autorizadora (formato aberto):
+
+    76F82C37647FEC4C 6B5864F8312AAD8C
+
+Obs.: no cenário real, a chave de transaporte será gerada pela autorizadora 
+      e cadastrada de forma segura no HSM da Auttar através de cerimonial.
+	  Não será de conhecimento da Auttar.
+
+---------------------------------------------------------------------------
+	  
+Exemplo de Working Key criptografada com a chave de transporte (KEK) da 
+autorizadora:
+
+    175DF0A7FCE3F498 E3CDD798B3EE9680
+
+Obs.: é uma das 10 working keys fornecidas pela Auttar, geradas 
+      aleatoriamente pelo HSM da Auttar a partir da KEK previamente 
+	  cadastrada pela autorizadora. É enviada pela autorizadora no momento
+	  da transação.
+
+---------------------------------------------------------------------------	  
+
+Ao receber a working key da autorizadora, a Auttar faz o mapeamento desta
+em outra WK equivalente, criptografada com a MK da Auttar também pelo HSM.
+Esta chave equivalente será passada para o pinpad no momento da captura da 
+senha, pois o pinpad possui cadastrada em sua tabela intera a MK da Auttar.
+
+O pinpad descriptografará a working key, e utilizará esta chave para 
+criptografar o PIN Block (contendo a senha).
+
+---------------------------------------------------------------------------	  
+
+Exemplo de PIN Block criptografado com a working key:
+
+    DA180259BDBFA20B
+
+Obs.1: este bloco, ao ser descriptografado pela autorizadora, estará no 
+	   formato ANSI X9.8 (ISO-0).
+
+Obs.2: O PAN utilizado no exemplo foi 000000000000 (vide especificação 
+       do padrão ANSI X9.8)
+	   
+---------------------------------------------------------------------------	
+	
+Woking Key (WK) aberta, descriptografada pela autorizadora com a sua KEK:
+
+    7FFD830715BC5BCD 083E7C5BF8EFFD19
+
+Obs.: no cenário real, a WK aberta é desconhecida pela Auttar (fornecida 
+      aqui apenas para exemplo e testes)
+
+---------------------------------------------------------------------------	  
+	  
+PIN Block aberto (senha 123456)
+
+06123456FFFFFFFF
+
+Lembrando:
+
+1) pinblock descriptografado pela autorizadora com a WK aberta.
+
+2) working key aberta foi descriptografada pela autorizadora com a sua
+   própria KEK.
+	   
+---------------------------------------------------------------------------	   
